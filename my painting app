@@ -1,0 +1,150 @@
+public class MainActivity extends AppCompatActivity {
+    
+    Button btnChallenge, btnSettings, btnStore, btnHelp;
+    TextView txtCoins;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        btnChallenge = findViewById(R.id.btnChallenge);
+        btnSettings = findViewById(R.id.btnSettings);
+        btnStore = findViewById(R.id.btnStore);
+        btnHelp = findViewById(R.id.btnHelp);
+        txtCoins = findViewById(R.id.txtCoins);
+
+        btnChallenge.setOnClickListener(v -> {
+            // Open Challenge Screen
+            startActivity(new Intent(MainActivity.this, ChallengeActivity.class));
+        });
+
+        btnSettings.setOnClickListener(v -> {
+            // Open Settings
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+        });
+
+        btnStore.setOnClickListener(v -> {
+            // Open Store
+            startActivity(new Intent(MainActivity.this, StoreActivity.class));
+        });
+
+        btnHelp.setOnClickListener(v -> {
+            // Open Help
+            startActivity(new Intent(MainActivity.this, HelpActivity.class));
+        });
+        
+        // Update coins from database
+        txtCoins.setText("Coins: " + getCoinsFromDatabase());
+    }
+
+    private int getCoinsFromDatabase() {
+        // Here you can fetch the current coins count from Firebase or your backend
+        return 100; // Example
+    }
+}
+public class ChallengeActivity extends AppCompatActivity {
+    
+    Button btnColoringDone;
+    int coinsEarned = 20;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_challenge);
+
+        btnColoringDone = findViewById(R.id.btnColoringDone);
+        
+        btnColoringDone.setOnClickListener(v -> {
+            // Show message or animation for completing the challenge
+            updateCoins(coinsEarned);
+            Toast.makeText(this, "Challenge Completed! Coins Earned: " + coinsEarned, Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void updateCoins(int coins) {
+        // Update the coins in the database or shared preferences
+        // Example: Increase coins by earned amount
+        int currentCoins = getCoinsFromDatabase();
+        currentCoins += coins;
+        // Update the coin count in the database
+    }
+
+    private int getCoinsFromDatabase() {
+        // Retrieve coins from the database
+        return 100; // Example
+    }
+}
+public class ChallengeActivity extends AppCompatActivity {
+    
+    Button btnColoringDone;
+    int coinsEarned = 20;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_challenge);
+
+        btnColoringDone = findViewById(R.id.btnColoringDone);
+        
+        btnColoringDone.setOnClickListener(v -> {
+            // Show message or animation for completing the challenge
+            updateCoins(coinsEarned);
+            Toast.makeText(this, "Challenge Completed! Coins Earned: " + coinsEarned, Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void updateCoins(int coins) {
+        // Update the coins in the database or shared preferences
+        // Example: Increase coins by earned amount
+        int currentCoins = getCoinsFromDatabase();
+        currentCoins += coins;
+        // Update the coin count in the database
+    }
+
+    private int getCoinsFromDatabase() {
+        // Retrieve coins from the database
+        return 100; // Example
+    }
+}
+public class SettingsActivity extends AppCompatActivity {
+    
+    SeekBar seekBarAudio;
+    TextView txtAudioLevel;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_settings);
+
+        seekBarAudio = findViewById(R.id.seekBarAudio);
+        txtAudioLevel = findViewById(R.id.txtAudioLevel);
+
+        seekBarAudio.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                txtAudioLevel.setText("Audio Level: " + progress);
+                // Here, update the audio in the app accordingly
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+    }
+}
+FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+// Get coins from Firestore
+DocumentReference userRef = db.collection("users").document(userId);
+userRef.get().addOnCompleteListener(task -> {
+    if (task.isSuccessful()) {
+        DocumentSnapshot document = task.getResult();
+        if (document.exists()) {
+            int coins = document.getLong("coins").intValue();
+            txtCoins.setText("Coins: " + coins);
+        }
+    }
+});
